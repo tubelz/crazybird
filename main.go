@@ -2,6 +2,10 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"math/rand"
+	"time"
+
 	"github.com/tubelz/crazybird/cscene"
 	"github.com/tubelz/crazybird/csystem"
 	"github.com/tubelz/macaw"
@@ -10,15 +14,12 @@ import (
 	"github.com/tubelz/macaw/system"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
-	"log"
-	"math/rand"
-	"time"
 )
 
 func main() {
 	fmt.Println("Crazy Bird!")
 	var err error
-	err = macaw.Initialize(true, true, true)
+	err = macaw.Initialize()
 	if err != nil {
 		fmt.Println("Macaw could not initialize")
 	}
