@@ -57,8 +57,7 @@ func (m *MenuSystem) Update() {
 				if obj.GetType() != "menuselectbox" {
 					continue
 				}
-				positionComponent, _ := obj.GetComponent("position")
-				position := positionComponent.(*entity.PositionComponent)
+				position := obj.GetComponent(&entity.PositionComponent{}).(*entity.PositionComponent)
 				position.Pos.Y = 399 + int32(m.pos)*30
 			}
 		}

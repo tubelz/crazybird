@@ -110,8 +110,8 @@ func initializeGameLoop(systems []system.Systemer, em *entity.Manager, im *input
 
 func initializeEntities(em *entity.Manager) {
 	camera := em.Create("camera")
-	camera.AddComponent("position", &entity.PositionComponent{&sdl.Point{0, 0}})
-	camera.AddComponent("camera", &entity.CameraComponent{
+	camera.AddComponent(&entity.PositionComponent{&sdl.Point{0, 0}})
+	camera.AddComponent(&entity.CameraComponent{
 		ViewportSize: sdl.Point{800, 600},
 		WorldSize:    sdl.Point{1145, 600},
 	})

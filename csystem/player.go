@@ -53,8 +53,8 @@ func (p *PlayerSystem) Init() {
 	p.lifes = 3
 	p.score = 0
 	p.crazy = false
-	objSpritesheet := &entity.Spritesheet{}
-	objSpritesheet.Init(p.RenderSystem.Renderer, "assets/img/objects.png")
+	objSpritesheet := &entity.Spritesheet{Renderer: p.RenderSystem.Renderer, Filepath: "assets/img/objects.png"}
+	objSpritesheet.Init()
 	// Load sprites from spritesheet
 	p.sprites = make(map[string]entity.RenderComponent)
 	lifelessCrop := &sdl.Rect{94, 0, 32, 38}
@@ -71,8 +71,8 @@ func (p *PlayerSystem) SetSceneManager(sm *macaw.SceneManager) {
 func (p *PlayerSystem) Update() {
 	if p.crazy {
 		var player *entity.Entity
-		it := p.EntityManager.IterAvailable()
-		for tmpObj, itok := it(); itok; tmpObj, itok = it() {
+		it := p.EntityManager.IterAvailable(-1)
+		for tmpObj, entIndex := it(); entIndex != -1; tmpObj, entIndex = it() {
 			if tmpObj.GetType() == "player" {
 				player = tmpObj
 				break
@@ -87,9 +87,9 @@ func (p *PlayerSystem) Update() {
 			if obj.GetType() != "player" {
 				continue
 			}
-			physicsComponent, _ := obj.GetComponent("physics")
+			physicsComponent := obj.GetComponent(&entity.PhysicsComponent{})
 			physics := physicsComponent.(*entity.PhysicsComponent)
-			positionComponent, _ := obj.GetComponent("position")
+			positionComponent := obj.GetComponent(&entity.PositionComponent{})
 			position := positionComponent.(*entity.PositionComponent)
 
 			var value float32
@@ -131,10 +131,10 @@ func stopPlayer(event system.Event) {
 	if border.Ent.GetID() != 1 {
 		return
 	}
-	component, _ := border.Ent.GetComponent("position")
+	component := border.Ent.GetComponent(&entity.PositionComponent{})
 	position := component.(*entity.PositionComponent)
 
-	component, _ = border.Ent.GetComponent("physics")
+	component = border.Ent.GetComponent(&entity.PhysicsComponent{})
 	physics := component.(*entity.PhysicsComponent)
 
 	switch border.Side {
@@ -171,14 +171,14 @@ func collectObject(ps *PlayerSystem, event system.Event) {
 	if objCollided.GetType() == "fruit" {
 		// score is wrong here... we should get the right type
 		var playerScore *entity.Entity
-		it := ps.EntityManager.IterAvailable()
-		for tmpObj, itok := it(); itok; tmpObj, itok = it() {
+		it := ps.EntityManager.IterAvailable(-1)
+		for tmpObj, entIndex := it(); entIndex != -1; tmpObj, entIndex = it() {
 			if tmpObj.GetType() == "score" {
 				playerScore = tmpObj
 				break
 			}
 		}
-		f := playerScore.GetComponents()["font"].(*entity.FontComponent)
+		f := playerScore.GetComponent(&entity.FontComponent{}).(*entity.FontComponent)
 		ps.score = ps.score + 1
 		f.Text = fmt.Sprintf("score: %d", ps.score)
 		f.Modified = true
@@ -189,7 +189,7 @@ func collectObject(ps *PlayerSystem, event system.Event) {
 			ps.SceneManager.ChangeScene("menu")
 		}
 	} else if objCollided.GetType() == "mushroom" {
-		c, _ := collision.Ent.GetComponent("render")
+		c := collision.Ent.GetComponent(&entity.RenderComponent{})
 		render := c.(*entity.RenderComponent)
 		render.Texture.SetColorMod(0xFF, 0, 0x6F)
 		ps.crazy = true
@@ -200,8 +200,8 @@ func collectObject(ps *PlayerSystem, event system.Event) {
 			if collision.Ent != nil {
 				ps.crazy = false
 				render.Texture.SetColorMod(0xFF, 0xFF, 0xFF)
-				physicsComponent, ok := collision.Ent.GetComponent("physics")
-				if ok {
+				physicsComponent := collision.Ent.GetComponent(&entity.PhysicsComponent{})
+				if physicsComponent != nil {
 					physics := physicsComponent.(*entity.PhysicsComponent)
 					physics.Vel.X = 0
 					physics.Vel.Y = 0
@@ -241,9 +241,9 @@ func (p *PlayerSystem) moveCrazy(player *entity.Entity) {
 	if player == nil {
 		return
 	}
-	physicsComponent, _ := player.GetComponent("physics")
+	physicsComponent := player.GetComponent(&entity.PhysicsComponent{})
 	physics := physicsComponent.(*entity.PhysicsComponent)
-	positionComponent, _ := player.GetComponent("position")
+	positionComponent := player.GetComponent(&entity.PositionComponent{})
 	position := positionComponent.(*entity.PositionComponent)
 
 	speed := p.crazyspeed.X
@@ -288,10 +288,10 @@ func (p *PlayerSystem) moveCrazy(player *entity.Entity) {
 // takes care when the player loses a life
 func lostLife(ps *PlayerSystem) {
 	// remove life
-	it := ps.EntityManager.IterAvailable()
+	it := ps.EntityManager.IterAvailable(-1)
 	var lifeIds [3]uint16
 	var count int
-	for obj, itok := it(); itok; obj, itok = it() {
+	for obj, entIndex := it(); entIndex != -1; obj, entIndex = it() {
 		if obj.GetType() == "life" {
 			lifeIds[count] = obj.GetID()
 			count++
@@ -302,6 +302,6 @@ func lostLife(ps *PlayerSystem) {
 	obj := ps.EntityManager.Create("lifeless")
 	sprite, _ := ps.sprites["lifeless"]
 	x := 620 + ps.lifes*40
-	obj.AddComponent("render", &sprite)
-	obj.AddComponent("position", &entity.PositionComponent{&sdl.Point{int32(x), 10}})
+	obj.AddComponent(&sprite)
+	obj.AddComponent(&entity.PositionComponent{&sdl.Point{int32(x), 10}})
 }

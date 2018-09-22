@@ -62,23 +62,24 @@ func initializeEntities(em *entity.Manager, renderSystem *system.RenderSystem, f
 		start := em.Create("menuoption")
 		credits := em.Create("menuoption")
 
-		title.AddComponent("position", &entity.PositionComponent{&sdl.Point{280, 20}})
-		title.AddComponent("font", &entity.FontComponent{Text: "crazy bird", Modified: true, Font: font})
-		title.AddComponent("render", &entity.RenderComponent{Renderer: renderSystem.Renderer})
+		title.AddComponent(&entity.PositionComponent{&sdl.Point{280, 20}})
+		title.AddComponent(&entity.FontComponent{Text: "crazy bird", Modified: true, Font: font})
+		title.AddComponent(&entity.RenderComponent{RenderType: entity.RTFont})
 
-		selectbox.AddComponent("position", &entity.PositionComponent{&sdl.Point{280, 399}})
-		selectbox.AddComponent("geometry", &entity.RectangleComponent{
+		selectbox.AddComponent(&entity.PositionComponent{&sdl.Point{280, 399}})
+		selectbox.AddComponent(&entity.RenderComponent{RenderType: entity.RTGeometry})
+		selectbox.AddComponent(&entity.RectangleComponent{
 			Size:   &sdl.Point{140, 22},
 			Color:  &sdl.Color{0xC0, 0xC0, 0xC0, 0x99},
 			Filled: true,
 		})
 
-		start.AddComponent("position", &entity.PositionComponent{&sdl.Point{300, 400}})
-		start.AddComponent("font", &entity.FontComponent{Text: "start", Modified: true, Font: font})
-		start.AddComponent("render", &entity.RenderComponent{Renderer: renderSystem.Renderer})
+		start.AddComponent(&entity.PositionComponent{&sdl.Point{300, 400}})
+		start.AddComponent(&entity.FontComponent{Text: "start", Modified: true, Font: font})
+		start.AddComponent(&entity.RenderComponent{RenderType: entity.RTFont})
 
-		credits.AddComponent("position", &entity.PositionComponent{&sdl.Point{300, 430}})
-		credits.AddComponent("font", &entity.FontComponent{Text: "credits", Modified: true, Font: font})
-		credits.AddComponent("render", &entity.RenderComponent{Renderer: renderSystem.Renderer})
+		credits.AddComponent(&entity.PositionComponent{&sdl.Point{300, 430}})
+		credits.AddComponent(&entity.FontComponent{Text: "credits", Modified: true, Font: font})
+		credits.AddComponent(&entity.RenderComponent{RenderType: entity.RTFont})
 	}
 }

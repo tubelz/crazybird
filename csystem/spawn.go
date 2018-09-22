@@ -3,6 +3,7 @@ package csystem
 import (
 	"github.com/tubelz/macaw/entity"
 	"github.com/tubelz/macaw/math"
+	// "github.com/tubelz/macaw/cmd"
 	"github.com/tubelz/macaw/system"
 	"github.com/veandco/go-sdl2/sdl"
 	"log"
@@ -29,8 +30,8 @@ func (s *SpawnSystem) Init() {
 	}
 	s.CollisionSystem.AddHandler("border event", removeFunc)
 
-	objSpritesheet := &entity.Spritesheet{}
-	objSpritesheet.Init(s.RenderSystem.Renderer, "assets/img/objects.png")
+	objSpritesheet := &entity.Spritesheet{Renderer: s.RenderSystem.Renderer, Filepath: "assets/img/objects.png"}
+	objSpritesheet.Init()
 	s.Spritesheet = objSpritesheet
 	// Load sprites from spritesheet
 	s.Sprites = make(map[string]entity.RenderComponent)
@@ -42,8 +43,8 @@ func (s *SpawnSystem) Init() {
 	fruitSprite := objSpritesheet.LoadSprite(fruitCrop)
 	s.Sprites["fruit"] = fruitSprite
 
-	modifySpritesheet := &entity.Spritesheet{}
-	modifySpritesheet.Init(s.RenderSystem.Renderer, "assets/img/objects.png")
+	modifySpritesheet := &entity.Spritesheet{Renderer: s.RenderSystem.Renderer, Filepath: "assets/img/objects.png"}
+	modifySpritesheet.Init()
 	modifySpritesheet.Texture.SetColorMod(128, 128, 0)
 	badSprite := modifySpritesheet.LoadSprite(fruitCrop)
 	s.Sprites["badfruit"] = badSprite
@@ -57,16 +58,17 @@ func (s *SpawnSystem) Update() {
 		s.count = 0
 		obj := s.EntityManager.Create("badfruit")
 		sprite, _ := s.Sprites["badfruit"]
-		obj.AddComponent("render", &sprite)
+		obj.AddComponent(&sprite)
 		// obj.AddComponent("geometry", &entity.RectangleComponent{
 		// 	Size:   &sdl.Point{40, 40},
 		// 	Color:  &sdl.Color{0xFF, 0x00, 0x00, 0xFF},
 		// 	Filled: true,
 		// })
 		y := rand.Int31n(470) + 30
-		obj.AddComponent("position", &entity.PositionComponent{&sdl.Point{740, y}})
-		obj.AddComponent("collision", &entity.CollisionComponent{[]sdl.Rect{sdl.Rect{0, 0, 40, 32}}})
-		obj.AddComponent("physics", &entity.PhysicsComponent{
+		obj.AddComponent(&entity.PositionComponent{&sdl.Point{740, y}})
+		obj.AddComponent(&entity.PositionComponent{&sdl.Point{740, y}})
+		obj.AddComponent(&entity.CollisionComponent{[]sdl.Rect{sdl.Rect{0, 0, 40, 32}}})
+		obj.AddComponent(&entity.PhysicsComponent{
 			Vel:       &math.FPoint{-1, 0},
 			Acc:       &math.FPoint{0, 0},
 			FuturePos: &math.FPoint{740, float32(y)},
@@ -77,16 +79,17 @@ func (s *SpawnSystem) Update() {
 		if rand.Int31n(3) == 0 {
 			obj := s.EntityManager.Create("fruit")
 			sprite, _ := s.Sprites["fruit"]
-			obj.AddComponent("render", &sprite)
+			obj.AddComponent(&sprite)
 			// obj.AddComponent("geometry", &entity.RectangleComponent{
 			// 	Size:   &sdl.Point{40, 40},
 			// 	Color:  &sdl.Color{0x00, 0xFF, 0x00, 0xFF},
 			// 	Filled: true,
 			// })
 			y := rand.Int31n(470) + 30
-			obj.AddComponent("position", &entity.PositionComponent{&sdl.Point{740, y}})
-			obj.AddComponent("collision", &entity.CollisionComponent{[]sdl.Rect{sdl.Rect{0, 0, 40, 32}}})
-			obj.AddComponent("physics", &entity.PhysicsComponent{
+			obj.AddComponent(&entity.PositionComponent{&sdl.Point{740, y}})
+			obj.AddComponent(&entity.PositionComponent{&sdl.Point{740, y}})
+			obj.AddComponent(&entity.CollisionComponent{[]sdl.Rect{sdl.Rect{0, 0, 40, 32}}})
+			obj.AddComponent(&entity.PhysicsComponent{
 				Vel:       &math.FPoint{-1, 0},
 				Acc:       &math.FPoint{0, 0},
 				FuturePos: &math.FPoint{740, float32(y)},
@@ -94,11 +97,12 @@ func (s *SpawnSystem) Update() {
 		} else {
 			obj := s.EntityManager.Create("mushroom")
 			sprite, _ := s.Sprites["mushroom"]
-			obj.AddComponent("render", &sprite)
+			obj.AddComponent(&sprite)
 			y := rand.Int31n(470) + 30
-			obj.AddComponent("position", &entity.PositionComponent{&sdl.Point{740, y}})
-			obj.AddComponent("collision", &entity.CollisionComponent{[]sdl.Rect{sdl.Rect{0, 0, 40, 32}}})
-			obj.AddComponent("physics", &entity.PhysicsComponent{
+			obj.AddComponent(&entity.PositionComponent{&sdl.Point{740, y}})
+			obj.AddComponent(&entity.PositionComponent{&sdl.Point{740, y}})
+			obj.AddComponent(&entity.CollisionComponent{[]sdl.Rect{sdl.Rect{0, 0, 40, 32}}})
+			obj.AddComponent(&entity.PhysicsComponent{
 				Vel:       &math.FPoint{-1, 0},
 				Acc:       &math.FPoint{0, 0},
 				FuturePos: &math.FPoint{740, float32(y)},
@@ -113,7 +117,7 @@ func removeObj(s *SpawnSystem, event system.Event) {
 	if border.Ent.GetType() == "player" {
 		return
 	}
-	component, _ := border.Ent.GetComponent("position")
+	component := border.Ent.GetComponent(&entity.PositionComponent{})
 	position := component.(*entity.PositionComponent)
 
 	if border.Side == "left" && position.Pos.X < -30 {

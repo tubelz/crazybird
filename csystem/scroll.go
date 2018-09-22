@@ -25,8 +25,7 @@ func (s *ScrollSystem) Update() {
 		if e.GetType() != "background" {
 			continue
 		}
-		r, _ := e.GetComponent("render")
-		render := r.(*entity.RenderComponent)
+		render := e.GetComponent(&entity.RenderComponent{}).(*entity.RenderComponent)
 		render.Crop.X++
 		if render.Crop.X > 1942-800 {
 			render.Crop.X = 0

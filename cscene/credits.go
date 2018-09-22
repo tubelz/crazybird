@@ -64,24 +64,25 @@ func initializeCreditEntities(em *entity.Manager, renderSystem *system.RenderSys
 		selectbox := em.Create("creditsselectbox")
 		backButton := em.Create("select")
 
-		selectbox.AddComponent("position", &entity.PositionComponent{&sdl.Point{280, 399}})
-		selectbox.AddComponent("geometry", &entity.RectangleComponent{
+		selectbox.AddComponent(&entity.PositionComponent{&sdl.Point{280, 399}})
+		selectbox.AddComponent(&entity.RenderComponent{RenderType: entity.RTGeometry})
+		selectbox.AddComponent(&entity.RectangleComponent{
 			Size:   &sdl.Point{140, 22},
 			Color:  &sdl.Color{0xC0, 0xC0, 0xC0, 0x99},
 			Filled: true,
 		})
 
-		backButton.AddComponent("position", &entity.PositionComponent{&sdl.Point{300, 400}})
-		backButton.AddComponent("font", &entity.FontComponent{Text: "back", Modified: true, Font: font})
-		backButton.AddComponent("render", &entity.RenderComponent{Renderer: renderSystem.Renderer})
+		backButton.AddComponent(&entity.PositionComponent{&sdl.Point{300, 400}})
+		backButton.AddComponent(&entity.FontComponent{Text: "back", Modified: true, Font: font})
+		backButton.AddComponent(&entity.RenderComponent{RenderType: entity.RTFont})
 
-		title.AddComponent("font", &entity.FontComponent{Text: "Credits", Modified: true, Font: font})
-		developerSession.AddComponent("font", &entity.FontComponent{Text: "Developer, Artist and Producer", Modified: true, Font: font})
-		developer.AddComponent("font", &entity.FontComponent{Text: "Marcus Renno - @marcusrenno - marcusrenno.tech", Modified: true, Font: font})
-		musicSession.AddComponent("font", &entity.FontComponent{Text: "Music", Modified: true, Font: font})
-		music.AddComponent("font", &entity.FontComponent{Text: "Avaren - @avarenmusic", Modified: true, Font: font})
-		extraSession.AddComponent("font", &entity.FontComponent{Text: "Extra", Modified: true, Font: font})
-		extra.AddComponent("font", &entity.FontComponent{Text: "font by codeman38 - cody@zone38.net", Modified: true, Font: font})
+		title.AddComponent(&entity.FontComponent{Text: "Credits", Modified: true, Font: font})
+		developerSession.AddComponent(&entity.FontComponent{Text: "Developer, Artist and Producer", Modified: true, Font: font})
+		developer.AddComponent(&entity.FontComponent{Text: "Marcus Renno - @marcusrenno - marcusrenno.tech", Modified: true, Font: font})
+		musicSession.AddComponent(&entity.FontComponent{Text: "Music", Modified: true, Font: font})
+		music.AddComponent(&entity.FontComponent{Text: "Avaren - @avarenmusic", Modified: true, Font: font})
+		extraSession.AddComponent(&entity.FontComponent{Text: "Extra", Modified: true, Font: font})
+		extra.AddComponent(&entity.FontComponent{Text: "font by codeman38 - cody@zone38.net", Modified: true, Font: font})
 
 		objects := []*entity.Entity{
 			title, developerSession, developer, musicSession, music, extraSession, extra}
@@ -93,15 +94,11 @@ func initializeCreditEntities(em *entity.Manager, renderSystem *system.RenderSys
 			} else {
 				addPos(obj, pos, 1)
 			}
-			addRender(obj, renderSystem.Renderer)
+			obj.AddComponent(&entity.RenderComponent{RenderType: entity.RTFont})
 		}
 	}
 }
 
 func addPos(obj *entity.Entity, ypos int32, xpos int32) {
-	obj.AddComponent("position", &entity.PositionComponent{&sdl.Point{20 + xpos*20, 20 + ypos*40}})
-}
-
-func addRender(obj *entity.Entity, render *sdl.Renderer) {
-	obj.AddComponent("render", &entity.RenderComponent{Renderer: render})
+	obj.AddComponent(&entity.PositionComponent{&sdl.Point{20 + xpos*20, 20 + ypos*40}})
 }

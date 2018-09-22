@@ -75,12 +75,12 @@ func (g *GameScene) initializeEntities(renderSystem *system.RenderSystem, font *
 		//load sprite
 		g.createLife(renderSystem)
 
-		spritesheet1 := &entity.Spritesheet{}
-		spritesheet1.Init(renderSystem.Renderer, "assets/img/background.png")
+		spritesheet1 := &entity.Spritesheet{Renderer: renderSystem.Renderer, Filepath: "assets/img/background.png"}
+		spritesheet1.Init()
 		crop1 := &sdl.Rect{0, 0, 800, 600}
 		sprite1 := spritesheet1.LoadSprite(crop1)
-		background.AddComponent("render", &sprite1)
-		background.AddComponent("position", &entity.PositionComponent{&sdl.Point{0, 0}})
+		background.AddComponent(&sprite1)
+		background.AddComponent(&entity.PositionComponent{&sdl.Point{0, 0}})
 
 		// grid.AddComponent("position", &entity.PositionComponent{&sdl.Point{0, 0}})
 		// grid.AddComponent("grid", &entity.GridComponent{Size: &sdl.Point{20, 20}})
@@ -90,22 +90,22 @@ func (g *GameScene) initializeEntities(renderSystem *system.RenderSystem, font *
 		// 	Filled: true,
 		// })
 
-		playerSpritesheet := &entity.Spritesheet{}
-		playerSpritesheet.Init(renderSystem.Renderer, "assets/img/macaw_pixel.png")
+		playerSpritesheet := &entity.Spritesheet{Renderer: renderSystem.Renderer, Filepath: "assets/img/macaw_pixel.png"}
+		playerSpritesheet.Init()
 		crop := &sdl.Rect{0, 200, 112, 100}
 		sprite := playerSpritesheet.LoadSprite(crop)
 		sprite.Flip = 1
-		player.AddComponent("render", &sprite)
-		player.AddComponent("physics", &entity.PhysicsComponent{
+		player.AddComponent(&sprite)
+		player.AddComponent(&entity.PhysicsComponent{
 			Vel:       &math.FPoint{0, 0},
 			Acc:       &math.FPoint{0, 0},
 			FuturePos: &math.FPoint{550, 50},
 		})
-		player.AddComponent("position", &entity.PositionComponent{&sdl.Point{550, 50}})
-		player.AddComponent("collision", &entity.CollisionComponent{
+		player.AddComponent(&entity.PositionComponent{&sdl.Point{550, 50}})
+		player.AddComponent(&entity.CollisionComponent{
 			CollisionAreas: []sdl.Rect{sdl.Rect{80, 22, 25, 19}},
 		})
-		player.AddComponent("animation", &entity.AnimationComponent{
+		player.AddComponent(&entity.AnimationComponent{
 			InitialPos:     sdl.Point{0, 0},
 			AnimationSpeed: 7,
 			Current:        0,
@@ -113,13 +113,13 @@ func (g *GameScene) initializeEntities(renderSystem *system.RenderSystem, font *
 			RowLength:      2,
 		})
 
-		playerScore.AddComponent("position", &entity.PositionComponent{&sdl.Point{20, 20}})
-		playerScore.AddComponent("font", &entity.FontComponent{Text: "score: 0", Modified: true, Font: font})
-		playerScore.AddComponent("render", &entity.RenderComponent{Renderer: renderSystem.Renderer})
+		playerScore.AddComponent(&entity.PositionComponent{&sdl.Point{20, 20}})
+		playerScore.AddComponent(&entity.FontComponent{Text: "score: 0", Modified: true, Font: font})
+		playerScore.AddComponent(&entity.RenderComponent{RenderType: entity.RTFont})
 
-		timer.AddComponent("position", &entity.PositionComponent{&sdl.Point{300, 20}})
-		timer.AddComponent("font", &entity.FontComponent{Text: "00:00:00", Modified: true, Font: font})
-		timer.AddComponent("render", &entity.RenderComponent{Renderer: renderSystem.Renderer})
+		timer.AddComponent(&entity.PositionComponent{&sdl.Point{300, 20}})
+		timer.AddComponent(&entity.FontComponent{Text: "00:00:00", Modified: true, Font: font})
+		timer.AddComponent(&entity.RenderComponent{RenderType: entity.RTFont})
 
 		g.ticker = startTimer(em)
 	}
@@ -127,8 +127,8 @@ func (g *GameScene) initializeEntities(renderSystem *system.RenderSystem, font *
 
 func (g *GameScene) createLife(render *system.RenderSystem) {
 	em := g.EntityManager
-	objSpritesheet := &entity.Spritesheet{}
-	objSpritesheet.Init(render.Renderer, "assets/img/objects.png")
+	objSpritesheet := &entity.Spritesheet{Renderer: render.Renderer, Filepath: "assets/img/objects.png"}
+	objSpritesheet.Init()
 	// Load sprites from spritesheet
 	heartCrop := &sdl.Rect{60, 0, 32, 38}
 	sprite := objSpritesheet.LoadSprite(heartCrop)
@@ -136,8 +136,8 @@ func (g *GameScene) createLife(render *system.RenderSystem) {
 		obj := em.Create("life")
 		g.addEntity(obj)
 		x := 620 + i*40
-		obj.AddComponent("render", &sprite)
-		obj.AddComponent("position", &entity.PositionComponent{&sdl.Point{int32(x), 10}})
+		obj.AddComponent(&sprite)
+		obj.AddComponent(&entity.PositionComponent{&sdl.Point{int32(x), 10}})
 	}
 }
 
@@ -145,8 +145,8 @@ func startTimer(em *entity.Manager) *time.Ticker {
 	// ticker is a channel that receives periodic info / second
 	ticker := time.NewTicker(time.Second)
 	var timer *entity.Entity
-	it := em.IterAvailable()
-	for obj, itok := it(); itok; obj, itok = it() {
+	it := em.IterAvailable(-1)
+	for obj, entIndex := it(); entIndex != -1; obj, entIndex = it() {
 		if obj.GetType() == "timer" {
 			timer = obj
 			break
@@ -156,7 +156,7 @@ func startTimer(em *entity.Manager) *time.Ticker {
 	// update start time using ticker
 	go func() {
 		for t := range ticker.C {
-			if component, ok := timer.GetComponent("font"); ok {
+			if component := timer.GetComponent(&entity.FontComponent{}); component != nil {
 				font := component.(*entity.FontComponent)
 				// fmt.Println(t.Format("15:04:05"))
 				now := t.Sub(start)
