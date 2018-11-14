@@ -2,13 +2,14 @@ package cscene
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/tubelz/macaw"
 	"github.com/tubelz/macaw/entity"
 	"github.com/tubelz/macaw/math"
 	"github.com/tubelz/macaw/system"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
-	"time"
 )
 
 // GameScene is responsible to manage the content of the game scene
@@ -80,7 +81,7 @@ func (g *GameScene) initializeEntities(renderSystem *system.RenderSystem, font *
 		crop1 := &sdl.Rect{0, 0, 800, 600}
 		sprite1 := spritesheet1.LoadSprite(crop1)
 		background.AddComponent(&sprite1)
-		background.AddComponent(&entity.PositionComponent{&sdl.Point{0, 0}})
+		background.AddComponent(&entity.PositionComponent{Pos: &sdl.Point{0, 0}})
 
 		// grid.AddComponent("position", &entity.PositionComponent{&sdl.Point{0, 0}})
 		// grid.AddComponent("grid", &entity.GridComponent{Size: &sdl.Point{20, 20}})
@@ -101,7 +102,7 @@ func (g *GameScene) initializeEntities(renderSystem *system.RenderSystem, font *
 			Acc:       &math.FPoint{0, 0},
 			FuturePos: &math.FPoint{550, 50},
 		})
-		player.AddComponent(&entity.PositionComponent{&sdl.Point{550, 50}})
+		player.AddComponent(&entity.PositionComponent{Pos: &sdl.Point{550, 50}})
 		player.AddComponent(&entity.CollisionComponent{
 			CollisionAreas: []sdl.Rect{sdl.Rect{80, 22, 25, 19}},
 		})
@@ -113,11 +114,11 @@ func (g *GameScene) initializeEntities(renderSystem *system.RenderSystem, font *
 			RowLength:      2,
 		})
 
-		playerScore.AddComponent(&entity.PositionComponent{&sdl.Point{20, 20}})
+		playerScore.AddComponent(&entity.PositionComponent{Pos: &sdl.Point{20, 20}})
 		playerScore.AddComponent(&entity.FontComponent{Text: "score: 0", Modified: true, Font: font})
 		playerScore.AddComponent(&entity.RenderComponent{RenderType: entity.RTFont})
 
-		timer.AddComponent(&entity.PositionComponent{&sdl.Point{300, 20}})
+		timer.AddComponent(&entity.PositionComponent{Pos: &sdl.Point{300, 20}})
 		timer.AddComponent(&entity.FontComponent{Text: "00:00:00", Modified: true, Font: font})
 		timer.AddComponent(&entity.RenderComponent{RenderType: entity.RTFont})
 
@@ -137,7 +138,7 @@ func (g *GameScene) createLife(render *system.RenderSystem) {
 		g.addEntity(obj)
 		x := 620 + i*40
 		obj.AddComponent(&sprite)
-		obj.AddComponent(&entity.PositionComponent{&sdl.Point{int32(x), 10}})
+		obj.AddComponent(&entity.PositionComponent{Pos: &sdl.Point{int32(x), 10}})
 	}
 }
 

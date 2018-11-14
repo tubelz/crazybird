@@ -2,15 +2,16 @@ package csystem
 
 import (
 	"fmt"
+	"log"
+	"math/rand"
+	"time"
+
 	"github.com/tubelz/macaw"
 	"github.com/tubelz/macaw/entity"
 	"github.com/tubelz/macaw/input"
 	"github.com/tubelz/macaw/math"
 	"github.com/tubelz/macaw/system"
 	"github.com/veandco/go-sdl2/sdl"
-	"log"
-	"math/rand"
-	"time"
 )
 
 const (
@@ -303,5 +304,5 @@ func lostLife(ps *PlayerSystem) {
 	sprite, _ := ps.sprites["lifeless"]
 	x := 620 + ps.lifes*40
 	obj.AddComponent(&sprite)
-	obj.AddComponent(&entity.PositionComponent{&sdl.Point{int32(x), 10}})
+	obj.AddComponent(&entity.PositionComponent{Pos: &sdl.Point{int32(x), 10}})
 }

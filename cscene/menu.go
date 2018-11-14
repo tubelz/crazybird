@@ -2,12 +2,13 @@ package cscene
 
 import (
 	// "github.com/tubelz/crazybird/csystem"
+	"log"
+
 	"github.com/tubelz/macaw"
 	"github.com/tubelz/macaw/entity"
 	"github.com/tubelz/macaw/system"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
-	"log"
 )
 
 // MenuScene is responsible to manage the content of the menu scene
@@ -62,11 +63,11 @@ func initializeEntities(em *entity.Manager, renderSystem *system.RenderSystem, f
 		start := em.Create("menuoption")
 		credits := em.Create("menuoption")
 
-		title.AddComponent(&entity.PositionComponent{&sdl.Point{280, 20}})
+		title.AddComponent(&entity.PositionComponent{Pos: &sdl.Point{280, 20}})
 		title.AddComponent(&entity.FontComponent{Text: "crazy bird", Modified: true, Font: font})
 		title.AddComponent(&entity.RenderComponent{RenderType: entity.RTFont})
 
-		selectbox.AddComponent(&entity.PositionComponent{&sdl.Point{280, 399}})
+		selectbox.AddComponent(&entity.PositionComponent{Pos: &sdl.Point{280, 399}})
 		selectbox.AddComponent(&entity.RenderComponent{RenderType: entity.RTGeometry})
 		selectbox.AddComponent(&entity.RectangleComponent{
 			Size:   &sdl.Point{140, 22},
@@ -74,11 +75,11 @@ func initializeEntities(em *entity.Manager, renderSystem *system.RenderSystem, f
 			Filled: true,
 		})
 
-		start.AddComponent(&entity.PositionComponent{&sdl.Point{300, 400}})
+		start.AddComponent(&entity.PositionComponent{Pos: &sdl.Point{300, 400}})
 		start.AddComponent(&entity.FontComponent{Text: "start", Modified: true, Font: font})
 		start.AddComponent(&entity.RenderComponent{RenderType: entity.RTFont})
 
-		credits.AddComponent(&entity.PositionComponent{&sdl.Point{300, 430}})
+		credits.AddComponent(&entity.PositionComponent{Pos: &sdl.Point{300, 430}})
 		credits.AddComponent(&entity.FontComponent{Text: "credits", Modified: true, Font: font})
 		credits.AddComponent(&entity.RenderComponent{RenderType: entity.RTFont})
 	}

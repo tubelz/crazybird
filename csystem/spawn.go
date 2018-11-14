@@ -3,11 +3,13 @@ package csystem
 import (
 	"github.com/tubelz/macaw/entity"
 	"github.com/tubelz/macaw/math"
+
 	// "github.com/tubelz/macaw/cmd"
-	"github.com/tubelz/macaw/system"
-	"github.com/veandco/go-sdl2/sdl"
 	"log"
 	"math/rand"
+
+	"github.com/tubelz/macaw/system"
+	"github.com/veandco/go-sdl2/sdl"
 )
 
 // SpawnSystem is the struct that contains the controllable stick
@@ -65,8 +67,7 @@ func (s *SpawnSystem) Update() {
 		// 	Filled: true,
 		// })
 		y := rand.Int31n(470) + 30
-		obj.AddComponent(&entity.PositionComponent{&sdl.Point{740, y}})
-		obj.AddComponent(&entity.PositionComponent{&sdl.Point{740, y}})
+		obj.AddComponent(&entity.PositionComponent{Pos: &sdl.Point{740, y}})
 		obj.AddComponent(&entity.CollisionComponent{[]sdl.Rect{sdl.Rect{0, 0, 40, 32}}})
 		obj.AddComponent(&entity.PhysicsComponent{
 			Vel:       &math.FPoint{-1, 0},
@@ -86,8 +87,7 @@ func (s *SpawnSystem) Update() {
 			// 	Filled: true,
 			// })
 			y := rand.Int31n(470) + 30
-			obj.AddComponent(&entity.PositionComponent{&sdl.Point{740, y}})
-			obj.AddComponent(&entity.PositionComponent{&sdl.Point{740, y}})
+			obj.AddComponent(&entity.PositionComponent{Pos: &sdl.Point{740, y}, Z: 1})
 			obj.AddComponent(&entity.CollisionComponent{[]sdl.Rect{sdl.Rect{0, 0, 40, 32}}})
 			obj.AddComponent(&entity.PhysicsComponent{
 				Vel:       &math.FPoint{-1, 0},
@@ -99,8 +99,7 @@ func (s *SpawnSystem) Update() {
 			sprite, _ := s.Sprites["mushroom"]
 			obj.AddComponent(&sprite)
 			y := rand.Int31n(470) + 30
-			obj.AddComponent(&entity.PositionComponent{&sdl.Point{740, y}})
-			obj.AddComponent(&entity.PositionComponent{&sdl.Point{740, y}})
+			obj.AddComponent(&entity.PositionComponent{Pos: &sdl.Point{740, y}})
 			obj.AddComponent(&entity.CollisionComponent{[]sdl.Rect{sdl.Rect{0, 0, 40, 32}}})
 			obj.AddComponent(&entity.PhysicsComponent{
 				Vel:       &math.FPoint{-1, 0},

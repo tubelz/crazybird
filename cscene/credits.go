@@ -2,12 +2,13 @@ package cscene
 
 import (
 	// "github.com/tubelz/crazybird/csystem"
+	"log"
+
 	"github.com/tubelz/macaw"
 	"github.com/tubelz/macaw/entity"
 	"github.com/tubelz/macaw/system"
 	"github.com/veandco/go-sdl2/sdl"
 	"github.com/veandco/go-sdl2/ttf"
-	"log"
 )
 
 // CreditsScene is responsible to manage the content of the menu scene
@@ -64,7 +65,7 @@ func initializeCreditEntities(em *entity.Manager, renderSystem *system.RenderSys
 		selectbox := em.Create("creditsselectbox")
 		backButton := em.Create("select")
 
-		selectbox.AddComponent(&entity.PositionComponent{&sdl.Point{280, 399}})
+		selectbox.AddComponent(&entity.PositionComponent{Pos: &sdl.Point{280, 399}})
 		selectbox.AddComponent(&entity.RenderComponent{RenderType: entity.RTGeometry})
 		selectbox.AddComponent(&entity.RectangleComponent{
 			Size:   &sdl.Point{140, 22},
@@ -72,7 +73,7 @@ func initializeCreditEntities(em *entity.Manager, renderSystem *system.RenderSys
 			Filled: true,
 		})
 
-		backButton.AddComponent(&entity.PositionComponent{&sdl.Point{300, 400}})
+		backButton.AddComponent(&entity.PositionComponent{Pos: &sdl.Point{300, 400}})
 		backButton.AddComponent(&entity.FontComponent{Text: "back", Modified: true, Font: font})
 		backButton.AddComponent(&entity.RenderComponent{RenderType: entity.RTFont})
 
@@ -100,5 +101,5 @@ func initializeCreditEntities(em *entity.Manager, renderSystem *system.RenderSys
 }
 
 func addPos(obj *entity.Entity, ypos int32, xpos int32) {
-	obj.AddComponent(&entity.PositionComponent{&sdl.Point{20 + xpos*20, 20 + ypos*40}})
+	obj.AddComponent(&entity.PositionComponent{Pos: &sdl.Point{20 + xpos*20, 20 + ypos*40}})
 }
