@@ -87,7 +87,7 @@ func (s *SpawnSystem) Update() {
 			// 	Filled: true,
 			// })
 			y := rand.Int31n(470) + 30
-			obj.AddComponent(&entity.PositionComponent{Pos: &sdl.Point{740, y}, Z: 1})
+			obj.AddComponent(&entity.PositionComponent{Pos: &sdl.Point{740, y}})
 			obj.AddComponent(&entity.CollisionComponent{[]sdl.Rect{sdl.Rect{0, 0, 40, 32}}})
 			obj.AddComponent(&entity.PhysicsComponent{
 				Vel:       &math.FPoint{-1, 0},
