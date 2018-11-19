@@ -1,0 +1,7 @@
+version: '3.7'
+
+services:
+  macaw:
+    # make sure you have the repository and app_name variables in the .env file
+    volumes:
+      - '.:/go/src/${REPOSITORY}/${APP_NAME}'

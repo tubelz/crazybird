@@ -1,0 +1,18 @@
+# build stage
+FROM rennomarcus/macaw:latest
+# some information about the docker image
+LABEL Name="Crazybird" Version="v0.1.1" Maintainer="Marcus Renno <me@rennomarcus.com>"
+
+ARG appName
+ARG repository
+# pass appName to my_app, so we can execute in entrypoint
+ENV my_app=${appName}
+
+WORKDIR /go/src/${repository}/${appName}
+COPY . .
+
+# install the application (game) using our libraries
+RUN CGO=1 GOARCH=amd64 GOOS=linux go build .
+
+# execute the game
+ENTRYPOINT ./${my_app}

@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  macaw:
+    # make sure you have the display, repository and app_name variables in the .env file
+    environment:
+      - DISPLAY=$DISPLAY
+    volumes: 
+      - '/tmp/.X11-unix/:/tmp/.X11-unix/'
+    build:
+      context: .
+      args:
+        - appName=$APP_NAME
+        - repository=$REPOSITORY
+    working_dir: '/go/src/${REPOSITORY}/${APP_NAME}'
+    stdin_open: true
+    tty: true
+    network_mode: "host"
+    devices:
+      - "/dev/snd:/dev/snd"
+  
