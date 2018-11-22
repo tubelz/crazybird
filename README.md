@@ -11,6 +11,8 @@ Make sure you have added in the .env file the three required variables:
   - REPOSITORY: path of your game;
   - DISPLAY: you can define a window or just use $DISPLAY to get the active window.
 
+Run `host +` to enable connections to your X server
+
 ### Dev
 
 If you want to run in dev mode, you have two options: using docker or docker-compose. Regardless of the option
